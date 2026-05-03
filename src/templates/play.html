@@ -43,6 +43,21 @@
   .game-play-breadcrumb a { color: var(--primary); }
   .game-play-breadcrumb a:hover { text-decoration: none; opacity: .8; }
   .game-play-actions { display: flex; align-items: center; gap: 0.25rem; flex-shrink: 0; margin-left: auto; }
+  .game-play-btn {
+    flex-shrink: 0;
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid var(--border-glow);
+    color: var(--primary);
+    border-radius: 6px;
+    padding: 0.22rem 0.65rem;
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .game-play-btn:hover { background: rgba(249, 115, 22, 0.22); text-decoration: none; }
   .game-icon-btn {
     display: flex; align-items: center; justify-content: center;
     width: 30px; height: 30px;
@@ -56,10 +71,13 @@
     padding: 0;
   }
   .game-icon-btn:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2); }
-  .game-icon-btn.active { color: var(--primary); border-color: var(--border-glow); background: var(--primary-glow); }
+  .game-icon-btn.active { color: #f97316; border-color: rgba(249,115,22,0.5); background: rgba(249,115,22,0.1); }
   .game-icon-btn svg { width: 15px; height: 15px; fill: currentColor; }
-  .game-play-frame { flex: 1; overflow: hidden; position: relative; }
-  .game-play-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
+  .game-play-frame { flex: 1; overflow: hidden; position: relative; padding: 0; }
+  .game-play-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; margin: 0; }
+  @media (max-width: 520px) { .game-play-title { display: none; } }
+  @media (max-width: 480px) { .game-play-outer { padding: 0.5rem 0.5rem 0; } }
+  /* Portrait phone: scale iframe 2× so landscape game renders at landscape resolution */
   .rotate-hint {
     display: none;
     text-align: center;
@@ -72,13 +90,32 @@
   @media (orientation: portrait) and (max-width: 768px) {
     .rotate-hint { display: block; }
     .game-play-wrap { height: auto; }
-    .game-play-frame { aspect-ratio: 16 / 9; flex: 0 0 auto; position: relative; }
-    .game-play-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .game-play-wrap.fullwindow { height: auto; }
+    .game-play-frame {
+      aspect-ratio: 16 / 9;
+      flex: 0 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+    .game-play-frame iframe {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: 0;
+      left: 0;
+      transform: scale(0.5);
+      transform-origin: top left;
+    }
   }
+
+  /* Mobile landscape: let game fill viewport height and remove portrait scaling */
   @media (max-width: 768px) and (orientation: landscape) {
     .rotate-hint { display: none; }
     .game-play-wrap { height: calc(100vh - 48px); }
-    .game-play-frame { flex: 1 1 auto; }
+    .game-play-wrap.fullwindow { height: calc(100vh - 8px); }
+    .game-play-frame { flex: 1 1 auto; height: 100%; position: relative; }
+    .game-play-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; transform: none; }
+    .game-info, .game-seo-section { padding: 0 0.75rem; }
   }
   .game-loading-overlay {
     position: absolute; inset: 0;
@@ -91,40 +128,42 @@
   .game-loading-overlay.hidden { opacity: 0; pointer-events: none; }
   .game-loading-spinner {
     width: 48px; height: 48px;
-    border: 4px solid var(--primary-glow);
-    border-top-color: var(--primary);
+    border: 4px solid rgba(249, 115, 22, 0.15);
+    border-top-color: #f97316;
     border-radius: 50%;
     animation: gamespin 0.8s linear infinite;
   }
   @keyframes gamespin { to { transform: rotate(360deg); } }
-  .game-loading-msg   { color: #9ca3af; font-size: .88rem; }
+  .game-loading-msg { color: #9ca3af; font-size: .88rem; }
   .game-loading-error { color: #f87171; font-size: .88rem; display: none; }
-  .game-loading-overlay.error .game-loading-spinner,
-  .game-loading-overlay.error .game-loading-msg   { display: none; }
+  .game-loading-overlay.error .game-loading-spinner { display: none; }
+  .game-loading-overlay.error .game-loading-msg { display: none; }
   .game-loading-overlay.error .game-loading-error { display: block; }
-  .game-play-btn {
-    background: var(--primary-glow);
-    border: 1px solid var(--border-glow);
-    color: var(--primary);
-    border-radius: 6px;
-    padding: 0.22rem 0.65rem;
-    font-size: .78rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    white-space: nowrap;
-  }
+  .game-loading-overlay.error { background: rgba(15,15,26,0.96); }
+
+  /* Game info section below iframe */
   .game-info {
     max-width: 1100px;
     margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 0 1rem; /* match .game-play-outer horizontal padding */
   }
-  .game-info h1 { font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }
-  .game-info-desc { color: var(--text-muted); font-size: .95rem; line-height: 1.7; margin-bottom: 1rem; max-width: 700px; }
+  .game-info h1 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .game-info-desc {
+    color: var(--text-muted);
+    font-size: .95rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    max-width: 700px;
+  }
   .game-info-tag {
     display: inline-block;
-    background: var(--primary-glow);
-    border: 1px solid rgba(249,115,22,0.25);
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.25);
     color: var(--primary);
     border-radius: 50px;
     padding: 0.25rem 0.85rem;
@@ -133,18 +172,43 @@
     text-decoration: none;
     transition: background var(--transition);
   }
-  .game-info-tag:hover { background: rgba(249,115,22,0.2); text-decoration: none; }
+  .game-info-tag:hover { background: rgba(249, 115, 22, 0.2); text-decoration: none; }
+
+  /* SEO + FAQ section */
   .game-seo-section {
     max-width: 1100px;
     margin: 0 auto 2.5rem;
     padding: 0 1rem;
   }
-  .game-seo-note { color: var(--text-muted); font-size: .88rem; line-height: 1.7; margin-bottom: 1.75rem; max-width: 700px; }
+  .game-seo-note {
+    color: var(--text-muted);
+    font-size: .88rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    max-width: 700px;
+  }
   .game-faq { max-width: 700px; }
-  .game-faq-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 0 0 1rem; }
-  .game-faq-item { border-top: 1px solid var(--border); padding: 0.85rem 0; }
-  .game-faq-q { font-weight: 600; color: #e5e7eb; font-size: .9rem; margin: 0 0 0.4rem; }
-  .game-faq-a { color: var(--text-muted); font-size: .88rem; line-height: 1.65; }
+  .game-faq-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 1rem;
+  }
+  .game-faq-item {
+    border-top: 1px solid var(--border);
+    padding: 0.85rem 0;
+  }
+  .game-faq-q {
+    font-weight: 600;
+    color: #e5e7eb;
+    font-size: .9rem;
+    margin: 0 0 0.4rem;
+  }
+  .game-faq-a {
+    color: var(--text-muted);
+    font-size: .88rem;
+    line-height: 1.65;
+  }
   .related-section { max-width: 1100px; margin: 0 auto 3rem; padding: 0 1rem; }
   .related-section h2 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
   .related-grid { display: flex; gap: 0.75rem; flex-wrap: wrap; }
@@ -172,7 +236,6 @@
     z-index: 999; white-space: nowrap;
   }
   .game-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  @media (max-width: 520px) { .game-play-title { display: none; } }
 </style>
 
 <div class="game-toast" id="gameToast"></div>
@@ -188,10 +251,13 @@
       <button class="game-icon-btn" id="likeBtn" title="Like this game">
         <svg viewBox="0 0 20 20"><path d="M2 10.5a1.5 1.5 0 113 0v5a1.5 1.5 0 01-3 0v-5zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       </button>
+      <button class="game-icon-btn" id="feedbackBtn" title="Feedback / Report">
+        <svg viewBox="0 0 20 20"><path d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 7l2.55 2.4A1 1 0 0116 11H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"/></svg>
+      </button>
       <button class="game-icon-btn" id="resetBtn" title="Reload game">
         <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
       </button>
-      <button class="game-icon-btn" id="fullwindowBtn" title="Expand">
+      <button class="game-icon-btn" id="fullwindowBtn" title="Expand game area">
         <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 011.414 1.414L7.414 15H9a1 1 0 010 2H5a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 011.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/></svg>
       </button>
       <button class="game-icon-btn" id="fullscreenBtn" title="Fullscreen">
@@ -267,7 +333,7 @@
   var wrap     = document.getElementById('gameWrap');
 
   if (overlay && frame) {
-    var loadTimer = setTimeout(function(){ overlay.classList.add('error'); }, 15000);
+    var loadTimer = setTimeout(function(){ overlay.classList.add('error'); }, 12000);
     frame.addEventListener('load', function(){ clearTimeout(loadTimer); overlay.classList.add('hidden'); });
   }
 
@@ -284,33 +350,48 @@
   if (likeBtn) {
     likeBtn.addEventListener('click', function(){
       likeBtn.classList.toggle('active');
-      showToast(likeBtn.classList.contains('active') ? 'Added to liked ♥' : 'Removed from liked');
+      showToast(likeBtn.classList.contains('active') ? 'Added to liked games ♥' : 'Removed from liked games');
     });
   }
 
+  // Feedback — navigate to contact page with game pre-filled
+  var feedbackBtn = document.getElementById('feedbackBtn');
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener('click', function(){
+      var gameTitle = '{{GAME_TITLE}}';
+      window.location.href = '/contact.html?game=' + encodeURIComponent(gameTitle) + '&type=feedback';
+    });
+  }
+
+  // Reset / Reload
   var resetBtn = document.getElementById('resetBtn');
   if (resetBtn && frame && overlay) {
     resetBtn.addEventListener('click', function(){
-      overlay.classList.remove('hidden','error');
-      frame.src = frame.src;
-      showToast('Game reloaded');
+      overlay.classList.remove('hidden', 'error');
+      var src = frame.src;
+      frame.src = '';
+      setTimeout(function(){ frame.src = src; }, 50);
     });
   }
 
+  // Full Window toggle
   var fullwindowBtn = document.getElementById('fullwindowBtn');
   if (fullwindowBtn && wrap) {
     fullwindowBtn.addEventListener('click', function(){
-      wrap.classList.toggle('fullwindow');
-      fullwindowBtn.classList.toggle('active', wrap.classList.contains('fullwindow'));
+      var expanded = wrap.classList.toggle('fullwindow');
+      fullwindowBtn.classList.toggle('active', expanded);
+      showToast(expanded ? 'Expanded view on' : 'Normal view');
     });
   }
 
+  // Fullscreen
   var fullscreenBtn = document.getElementById('fullscreenBtn');
   if (fullscreenBtn && frame) {
     fullscreenBtn.addEventListener('click', function(){
       var el = frame;
       if (el.requestFullscreen) el.requestFullscreen();
       else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
     });
   }
 })();

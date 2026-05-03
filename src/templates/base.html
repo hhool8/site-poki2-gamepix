@@ -68,37 +68,24 @@
           <a href="/contact.html">Contact</a>
           <a href="/privacy.html">Privacy</a>
           <a href="/search/">Search</a>
-          <a href="https://poki2.online" rel="noopener">Poki2 Network</a>
         </nav>
-        <div class="footer-cats" aria-label="Game categories">
-          <a href="/category/puzzle-games">Puzzle</a>
-          <a href="/category/action-games">Action</a>
-          <a href="/category/racing-games">Racing</a>
-          <a href="/category/sports-games">Sports</a>
-          <a href="/category/adventure-games">Adventure</a>
-          <a href="/category/strategy-games">Strategy</a>
-          <a href="/category/idle-games">Idle</a>
-          <a href="/category/casual-games">Casual</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2026 GamePix by Poki2. Games provided by <a href="https://www.gamepix.com" rel="noopener nofollow" target="_blank">GamePix</a>. Part of the <a href="https://poki2.online" rel="noopener">Poki2 Network</a>.</p>
-        <p>All games are free to play. No download required.</p>
+        <p class="footer-copy">&#169; 2026 GamePix by Poki2. Games provided by <a href="https://www.gamepix.com" rel="noopener nofollow" target="_blank">GamePix</a>. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
   <script>
-  /* ── Mobile nav toggle ─────────────────────────────────────────────────── */
-  (function () {
-    var btn  = document.getElementById('nav-toggle');
-    var cats = document.getElementById('nav-cats');
-    if (!btn || !cats) return;
-    btn.addEventListener('click', function () {
-      var open = cats.classList.toggle('open');
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  })();
+    (function(){
+      var btn = document.getElementById('nav-toggle');
+      var cats = document.getElementById('nav-cats');
+      if (btn && cats) {
+        btn.addEventListener('click', function(){
+          var open = cats.classList.toggle('open');
+          btn.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
   </script>
 
   <script>
