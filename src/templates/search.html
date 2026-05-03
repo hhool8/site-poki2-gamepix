@@ -1,0 +1,159 @@
+<style>
+  .search-page-wrap {
+    max-width: var(--max-width);
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+  }
+  .search-page-wrap h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+  .search-bar-wrap {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+  }
+  #page-search-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.65rem 1rem;
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  #page-search-input:focus { border-color: var(--primary); }
+  #page-search-input::placeholder { color: var(--text-muted); }
+  .search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr));
+    gap: 1rem;
+  }
+  .search-game-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+  .search-game-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .search-game-card img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+    background: #1a1a2e;
+  }
+  .search-game-card-label {
+    padding: 0.45rem 0.6rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-status { color: var(--text-muted); font-size: .9rem; margin-bottom: 1rem; }
+  .search-empty { color: var(--text-muted); text-align: center; padding: 3rem 0; font-size: .95rem; }
+  @media (max-width: 768px) {
+    .search-page-wrap { margin: 2rem auto; padding: 0 1.25rem; }
+    .search-results-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 0.75rem; }
+  }
+  @media (max-width: 480px) {
+    .search-bar-wrap { gap: 0.5rem; margin-bottom: 1.4rem; }
+    .search-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+  }
+  @media (max-width: 360px) { .search-results-grid { grid-template-columns: 1fr; } }
+</style>
+
+<div class="search-page-wrap">
+  <h1>Search Games</h1>
+  <div class="search-bar-wrap">
+    <input
+      type="search"
+      id="page-search-input"
+      placeholder="Search free GamePix games…"
+      aria-label="Search games"
+      autocomplete="off"
+      autofocus
+    >
+  </div>
+  <p class="search-status" id="search-status">Loading games…</p>
+  <div class="search-results-grid" id="search-results" aria-live="polite"></div>
+</div>
+
+<script>
+(function () {
+  var input  = document.getElementById('page-search-input');
+  var status = document.getElementById('search-status');
+  var grid   = document.getElementById('search-results');
+  var INDEX  = [];
+
+  var params = new URLSearchParams(window.location.search);
+  var initQ  = (params.get('q') || '').trim();
+
+  fetch('/search-index.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      INDEX = data;
+      if (initQ) { input.value = initQ; }
+      renderResults(initQ);
+    })
+    .catch(function() { status.textContent = 'Failed to load game index.'; });
+
+  input.addEventListener('input', function () {
+    var q = input.value.trim();
+    var url = q ? '/search/?q=' + encodeURIComponent(q) : '/search/';
+    history.replaceState(null, '', url);
+    renderResults(q);
+  });
+
+  function renderResults(q) {
+    var lower = q.toLowerCase();
+    var filtered = q.length === 0
+      ? INDEX
+      : INDEX.filter(function(g) {
+          return g.title.toLowerCase().includes(lower)
+              || g.catName.toLowerCase().includes(lower)
+              || (g.description && g.description.toLowerCase().includes(lower));
+        });
+
+    status.textContent = q
+      ? filtered.length + ' result' + (filtered.length !== 1 ? 's' : '') + ' for \u201c' + q + '\u201d'
+      : filtered.length + ' games';
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<p class="search-empty">No games found for \u201c' + escHtml(q) + '\u201d. Try a different search.</p>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(function(g) {
+      var img = g.thumbnail
+        ? '<img src="' + escAttr(g.thumbnail) + '" alt="' + escAttr(g.title) + '" loading="lazy">'
+        : '<img src="/favicon.svg" alt="' + escAttr(g.title) + '" loading="lazy" style="object-fit:contain;padding:1rem">';
+      return '<a class="search-game-card" href="/play/' + escAttr(g.slug) + '" aria-label="Play ' + escAttr(g.title) + ' free">'
+           + img
+           + '<span class="search-game-card-label">' + escHtml(g.title) + '</span>'
+           + '</a>';
+    }).join('');
+  }
+
+  function escAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+})();
+</script>

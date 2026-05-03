@@ -1,0 +1,71 @@
+{
+  "site": {
+    "name": "GamePix by Poki2",
+    "domain": "https://gamepix.poki2.online",
+    "faviconUrl": "https://gamepix.poki2.online/favicon.svg",
+    "ogImage": "https://gamepix.poki2.online/og-image.png"
+  },
+  "pages": [
+    {
+      "slug": "index",
+      "outputFile": "index.html",
+      "bodyClass": "home-page",
+      "title": "GamePix by Poki2 — Free HTML5 Games, No Download",
+      "description": "Play hundreds of free GamePix HTML5 games in your browser. Puzzle, action, racing, sports and more — instant play, no login required.",
+      "keywords": "free browser games, html5 games, gamepix games, online games no download, free games",
+      "canonical": "https://gamepix.poki2.online/",
+      "changefreq": "daily",
+      "priority": "1.0",
+      "og": {
+        "title": "GamePix by Poki2 — Free HTML5 Games",
+        "description": "Hundreds of free HTML5 games, instant play, no download. Puzzle, action, racing, sports and more.",
+        "url": "https://gamepix.poki2.online/",
+        "type": "website",
+        "image": "https://gamepix.poki2.online/og-image.png"
+      }
+    },
+    {
+      "slug": "about",
+      "outputFile": "about.html",
+      "bodyClass": "page",
+      "title": "About GamePix by Poki2",
+      "description": "GamePix by Poki2 is a free browser game portal powered by the GamePix HTML5 game catalog. Play hundreds of quality games instantly.",
+      "keywords": "about gamepix poki2, free browser games portal",
+      "canonical": "https://gamepix.poki2.online/about.html",
+      "changefreq": "monthly",
+      "priority": "0.4"
+    },
+    {
+      "slug": "contact",
+      "outputFile": "contact.html",
+      "bodyClass": "page",
+      "title": "Contact — GamePix by Poki2",
+      "description": "Contact the GamePix by Poki2 team. We welcome feedback, bug reports, and partnership inquiries.",
+      "keywords": "contact gamepix poki2",
+      "canonical": "https://gamepix.poki2.online/contact.html",
+      "changefreq": "monthly",
+      "priority": "0.3"
+    },
+    {
+      "slug": "privacy",
+      "outputFile": "privacy.html",
+      "bodyClass": "page",
+      "title": "Privacy Policy — GamePix by Poki2",
+      "description": "Privacy Policy for GamePix by Poki2. Learn how we handle data on gamepix.poki2.online.",
+      "keywords": "privacy policy gamepix poki2",
+      "canonical": "https://gamepix.poki2.online/privacy.html",
+      "indexable": false,
+      "changefreq": "yearly",
+      "priority": "0.2"
+    },
+    {
+      "slug": "search",
+      "outputFile": "search/index.html",
+      "bodyClass": "search-page",
+      "title": "Search Free Games — GamePix by Poki2",
+      "description": "Search all free HTML5 games on GamePix by Poki2. Find your favourite game instantly.",
+      "canonical": "https://gamepix.poki2.online/search/",
+      "indexable": false
+    }
+  ]
+}

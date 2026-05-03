@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  <meta name="keywords" content="{{KEYWORDS}}">
+  <link rel="canonical" href="{{CANONICAL}}">
+  {{ROBOTS_META}}
+
+  <meta property="og:title" content="{{OG_TITLE}}">
+  <meta property="og:description" content="{{OG_DESCRIPTION}}">
+  <meta property="og:url" content="{{OG_URL}}">
+  <meta property="og:type" content="{{OG_TYPE}}">
+  <meta property="og:site_name" content="GamePix by Poki2">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+
+  <meta name="twitter:card" content="{{TWITTER_CARD}}">
+  <meta name="twitter:title" content="{{TWITTER_TITLE}}">
+  <meta name="twitter:description" content="{{TWITTER_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{TWITTER_IMAGE}}">
+
+  {{SCHEMA}}
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body class="{{BODY_CLASS}}">
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="logo" href="/"><img class="logo-mark" src="/favicon.svg" alt="GamePix by Poki2" width="26" height="26">GamePix</a>
+    <div class="nav-cats" id="nav-cats" role="navigation" aria-label="Game categories">
+      <a href="/category/puzzle-games">🧩 Puzzle</a>
+      <a href="/category/action-games">⚔️ Action</a>
+      <a href="/category/racing-games">🏎️ Racing</a>
+      <a href="/category/sports-games">⚽ Sports</a>
+      <a href="/category/adventure-games">🗺️ Adventure</a>
+      <a href="/category/strategy-games">♟️ Strategy</a>
+      <a href="/category/idle-games">🖱️ Idle</a>
+      <a href="/category/casual-games">🎮 Casual</a>
+    </div>
+    <div class="nav-search-wrap" id="nav-search-wrap">
+      <form class="nav-search-form" action="/search/" method="get" role="search" aria-label="Search games" autocomplete="off">
+        <input class="nav-search-input" id="nav-search-input" type="search" name="q" placeholder="Search games…" aria-label="Search games" autocomplete="off" maxlength="100" aria-autocomplete="list" aria-controls="nav-search-dropdown" aria-expanded="false">
+        <button class="nav-search-btn" type="submit" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      </form>
+      <div class="nav-search-dropdown" id="nav-search-dropdown" role="listbox" aria-label="Search suggestions" hidden></div>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <main id="content">
+    {{CONTENT}}
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="/"><img class="logo-mark" src="/favicon.svg" alt="GamePix by Poki2" width="30" height="30">GamePix by Poki2</a>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="/about.html">About</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/search/">Search</a>
+          <a href="https://poki2.online" rel="noopener">Poki2 Network</a>
+        </nav>
+        <div class="footer-cats" aria-label="Game categories">
+          <a href="/category/puzzle-games">Puzzle</a>
+          <a href="/category/action-games">Action</a>
+          <a href="/category/racing-games">Racing</a>
+          <a href="/category/sports-games">Sports</a>
+          <a href="/category/adventure-games">Adventure</a>
+          <a href="/category/strategy-games">Strategy</a>
+          <a href="/category/idle-games">Idle</a>
+          <a href="/category/casual-games">Casual</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 GamePix by Poki2. Games provided by <a href="https://www.gamepix.com" rel="noopener nofollow" target="_blank">GamePix</a>. Part of the <a href="https://poki2.online" rel="noopener">Poki2 Network</a>.</p>
+        <p>All games are free to play. No download required.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  /* ── Mobile nav toggle ─────────────────────────────────────────────────── */
+  (function () {
+    var btn  = document.getElementById('nav-toggle');
+    var cats = document.getElementById('nav-cats');
+    if (!btn || !cats) return;
+    btn.addEventListener('click', function () {
+      var open = cats.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  })();
+  </script>
+
+  <script>
+  /* ── Navbar instant search ─────────────────────────────────────────────── */
+  (function () {
+    var INDEX = null;
+    var wrap  = document.getElementById('nav-search-wrap');
+    var input = document.getElementById('nav-search-input');
+    var drop  = document.getElementById('nav-search-dropdown');
+    if (!wrap || !input || !drop) return;
+
+    var MAX_RESULTS = 8;
+    var activeIdx   = -1;
+    var items       = [];
+
+    input.addEventListener('focus', loadIndex, { once: true });
+    input.addEventListener('input', onInput);
+    input.addEventListener('keydown', onKey);
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) closeDrop();
+    });
+
+    function loadIndex() {
+      if (INDEX !== null) return;
+      fetch('/search-index.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { INDEX = data; if (input.value.trim()) onInput(); })
+        .catch(function () { INDEX = []; });
+    }
+
+    function onInput() {
+      var q = input.value.trim();
+      if (!q || !INDEX) { closeDrop(); return; }
+      var lower = q.toLowerCase();
+      var results = INDEX.filter(function (g) {
+        return g.title.toLowerCase().includes(lower)
+            || g.catName.toLowerCase().includes(lower);
+      }).slice(0, MAX_RESULTS);
+      if (results.length === 0) { closeDrop(); return; }
+
+      items = results;
+      activeIdx = -1;
+      drop.innerHTML = results.map(function (g, i) {
+        var thumb = g.thumbnail
+          ? '<img src="' + escAttr(g.thumbnail) + '" alt="" loading="lazy">'
+          : '<span class="nsd-thumb-placeholder"></span>';
+        return '<a class="nsd-item" href="/play/' + escAttr(g.slug) + '" role="option" data-idx="' + i + '">'
+             + '<span class="nsd-thumb">' + thumb + '</span>'
+             + '<span class="nsd-label">' + escHtml(g.title) + '</span>'
+             + '<span class="nsd-cat">' + escHtml(g.catName) + '</span>'
+             + '</a>';
+      }).join('') + '<a class="nsd-more" href="/search/?q=' + encodeURIComponent(q) + '">See all results for \u201c' + escHtml(q) + '\u201d \u2192</a>';
+
+      drop.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    }
+
+    function onKey(e) {
+      if (drop.hidden) return;
+      var links = drop.querySelectorAll('.nsd-item');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIdx = Math.min(activeIdx + 1, links.length - 1);
+        setActive(links);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIdx = Math.max(activeIdx - 1, -1);
+        setActive(links);
+      } else if (e.key === 'Escape') {
+        closeDrop();
+      } else if (e.key === 'Enter' && activeIdx >= 0) {
+        e.preventDefault();
+        links[activeIdx].click();
+      }
+    }
+
+    function setActive(links) {
+      links.forEach(function (el, i) { el.classList.toggle('active', i === activeIdx); });
+      if (activeIdx >= 0) links[activeIdx].scrollIntoView({ block: 'nearest' });
+    }
+
+    function closeDrop() {
+      drop.hidden = true;
+      drop.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+      activeIdx = -1;
+    }
+
+    function escAttr(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+  })();
+  </script>
+</body>
+</html>

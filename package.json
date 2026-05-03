@@ -1,0 +1,18 @@
+{
+  "name": "gamepix-poki2-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "gamepix.poki2.online — Free GamePix HTML5 Games Portal",
+  "scripts": {
+    "fetch": "node scripts/gamepix-fetch.js",
+    "build": "node scripts/build-pages.js && node scripts/build-categories.js && node scripts/build-games.js && node scripts/build-search.js && node scripts/build-sitemap.js",
+    "deploy": "wrangler pages deploy dist --project-name gamepix-poki2-site",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "wrangler": "^3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

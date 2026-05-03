@@ -1,0 +1,21 @@
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# API credentials
+.env
+
+# Scratch files
+scripts/gamepix-catalog.json
