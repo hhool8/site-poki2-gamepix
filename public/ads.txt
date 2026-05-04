@@ -1,7 +1,7 @@
 google.com, pub-6199549323873133, DIRECT, f08c47fec0942fa0
 
 # Example entry for  GamePix (ad network for HTML5 games)
-#gpx-property-EO17I
+#gpx-property-2P0O8
 #gpx-last-updated-2024-11-21
 #gpx-reviq
 rev.iq, Kf077RYmx6XvWT8mhSbYq7LIQTU, DIRECT
