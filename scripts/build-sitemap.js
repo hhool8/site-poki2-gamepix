@@ -38,12 +38,8 @@ for (const p of seoData.pages) {
   entries.push(urlTag(p.canonical, fileLastMod(outPath), p.changefreq || 'monthly', p.priority || '0.5'));
 }
 
-// Game pages
-const games = gamesData.games.filter(g => !g.hidden);
-for (const g of games) {
-  const p       = path.join(distDir, 'play', `${g.slug}.html`);
-  entries.push(urlTag(`${gamesData.site.domain}/play/${g.slug}`, fileLastMod(p), 'weekly', '0.8'));
-}
+// Game pages intentionally excluded — sitemap was too large for Google Search Console
+// Individual game pages are crawled via category page links instead
 
 // Category pages
 for (const c of gamesData.categories) {
