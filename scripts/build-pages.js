@@ -4,7 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT                        = path.join(__dirname, '..');
-const { seoData, gamesData }      = require('./config');
+const { seoData, gamesData, normalizeThumbnailUrl } = require('./config');
 const baseTemplate                = fs.readFileSync(path.join(ROOT, 'src/templates/base.html'),  'utf8');
 
 const distDir = path.join(ROOT, 'dist');
@@ -118,7 +118,7 @@ function buildHomepageGameRows(games, categories) {
     if (catGames.length === 0) return '';
     const cardsHtml = catGames.map(game =>
       `      <a class="game-card" href="/play/${game.slug}" aria-label="Play ${escAttr(game.title)} free online">
-        <img src="${escAttr(game.thumbnail)}" alt="${escAttr(game.title)}" loading="lazy" width="180" height="135">
+        <img src="${escAttr(normalizeThumbnailUrl(game.thumbnail, 320))}" alt="${escAttr(game.title)}" loading="lazy" width="180" height="135">
         <span class="game-card-label">${escHtml(game.title)}</span>
       </a>`
     ).join('\n');

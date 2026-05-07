@@ -4,7 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT                        = path.join(__dirname, '..');
-const { seoData, gamesData }      = require('./config');
+const { seoData, gamesData, normalizeThumbnailUrl } = require('./config');
 const baseTemplate                = fs.readFileSync(path.join(ROOT, 'src/templates/base.html'),     'utf8');
 const categoryTemplate            = fs.readFileSync(path.join(ROOT, 'src/templates/category.html'), 'utf8');
 
@@ -73,8 +73,8 @@ for (const cat of categories) {
   const gameCount  = catGames.length;
   const canonical  = `${site.domain}/category/${cat.slug}`;
 
-  const gamesHtml = catGames.map(g => `      <a href="/play/${g.slug}" class="game-card">
-        <img src="${escAttr(g.thumbnail)}" alt="${escAttr(g.title)}" loading="lazy" width="200" height="150">
+    const gamesHtml = catGames.map(g => `      <a href="/play/${g.slug}" class="game-card">
+      <img src="${escAttr(normalizeThumbnailUrl(g.thumbnail, 320))}" alt="${escAttr(g.title)}" loading="lazy" width="200" height="150">
         <span class="game-card-label">${escAttr(g.title)}</span>
       </a>`).join('\n');
 

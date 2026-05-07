@@ -4,7 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT         = path.join(__dirname, '..');
-const { gamesData } = require('./config');
+const { gamesData, normalizeThumbnailUrl } = require('./config');
 const baseTemplate = fs.readFileSync(path.join(ROOT, 'src/templates/base.html'),   'utf8');
 const searchTpl    = fs.readFileSync(path.join(ROOT, 'src/templates/search.html'), 'utf8');
 
@@ -28,7 +28,7 @@ const index = games.map(g => ({
   description: g.description,
   category:    g.category,
   catName:     (catMap[g.category] || {}).name || '',
-  thumbnail:   g.thumbnail || '',
+  thumbnail:   normalizeThumbnailUrl(g.thumbnail, 320),
 }));
 
 fs.writeFileSync(

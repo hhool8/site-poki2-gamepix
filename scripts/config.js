@@ -19,6 +19,19 @@ const gamesData = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/games.jso
 // Publisher SID used in all embed URLs
 const GAMEPIX_SID = process.env.GAMEPIX_SID || 'EO17I';
 
+function normalizeThumbnailUrl(url, width = 320) {
+  if (!url) return '';
+
+  const raw = String(url).replace(/([?&])w==/g, '$1w=');
+  const target = Math.max(1, Number(width) || 320);
+
+  if (/([?&])w=\d+/i.test(raw)) {
+    return raw.replace(/([?&])w=\d+/i, `$1w=${target}`);
+  }
+
+  return raw.includes('?') ? `${raw}&w=${target}` : `${raw}?w=${target}`;
+}
+
 // Apply env-var domain override (e.g. for staging)
 if (process.env.SITE_DOMAIN) {
   const newDomain = process.env.SITE_DOMAIN.replace(/\/$/, '');
@@ -45,3 +58,4 @@ function escHtml(str) {
     .replace(/>/g, '&gt;');
 }
 module.exports.escHtml = escHtml;
+module.exports.normalizeThumbnailUrl = normalizeThumbnailUrl;

@@ -4,7 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT                              = path.join(__dirname, '..');
-const { seoData, gamesData, GAMEPIX_SID } = require('./config');
+const { seoData, gamesData, GAMEPIX_SID, normalizeThumbnailUrl } = require('./config');
 const baseTemplate                      = fs.readFileSync(path.join(ROOT, 'src/templates/base.html'), 'utf8');
 const playTemplate                      = fs.readFileSync(path.join(ROOT, 'src/templates/play.html'), 'utf8');
 
@@ -68,7 +68,7 @@ for (const game of games) {
   const cat         = catMap[game.category] || categories[0];
   const canonical   = `${site.domain}/play/${game.slug}`;
   const embedUrl    = `https://play.gamepix.com/${game.slug}/embed?sid=${GAMEPIX_SID}`;
-  const thumbUrl    = game.thumbnail;
+  const thumbUrl    = normalizeThumbnailUrl(game.thumbnail, 320);
   const isLandscape = game.orientation === 'landscape';
 
   // Pick 4 related games from same category (or fallback to other games)
@@ -76,8 +76,8 @@ for (const game of games) {
   const related = [...samecat, ...games.filter(g => g.category !== game.category && g.slug !== game.slug)]
     .slice(0, 4);
 
-  const relatedHtml = related.map(g => `        <a href="/play/${g.slug}" class="related-card">
-          <img src="${escAttr(g.thumbnail)}" alt="${escAttr(g.title)}" loading="lazy" width="140" height="105">
+    const relatedHtml = related.map(g => `        <a href="/play/${g.slug}" class="related-card">
+      <img src="${escAttr(normalizeThumbnailUrl(g.thumbnail, 320))}" alt="${escAttr(g.title)}" loading="lazy" width="140" height="105">
           <span>${escAttr(g.title)}</span>
         </a>`).join('\n');
 
