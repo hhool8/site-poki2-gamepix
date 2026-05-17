@@ -59,6 +59,7 @@ function renderBase(template, p) {
     .replace(/\{\{OG_TYPE\}\}/g,              escAttr(p.ogType))
     .replace(/\{\{OG_IMAGE\}\}/g,             escAttr(p.ogImage))
     .replace(/\{\{TWITTER_CARD\}\}/g,         escAttr(p.twitterCard))
+    .replace(/\{\{TWITTER_SITE\}\}/g,         escAttr(p.twitterSite))
     .replace(/\{\{TWITTER_TITLE\}\}/g,        escAttr(p.twitterTitle))
     .replace(/\{\{TWITTER_DESCRIPTION\}\}/g,  escAttr(p.twitterDescription))
     .replace(/\{\{TWITTER_IMAGE\}\}/g,        escAttr(p.twitterImage))
@@ -107,6 +108,7 @@ for (const cat of categories) {
     ogType:             'website',
     ogImage:            siteImage(),
     twitterCard:        'summary_large_image',
+    twitterSite:        '@poki2online',
     twitterTitle:       withBrand(`${cat.name} — Free Online Games`),
     twitterDescription: cat.description,
     twitterImage:       siteImage(),

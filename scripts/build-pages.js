@@ -44,6 +44,7 @@ for (const page of seoData.pages) {
     ogType:             (page.og && page.og.type) || 'website',
     ogImage:            (page.og && page.og.image) || siteImage(),
     twitterCard:        'summary_large_image',
+    twitterSite:        '@poki2online',
     twitterTitle:       withBrand(page.title),
     twitterDescription: page.description,
     twitterImage:       (page.og && page.og.image) || siteImage(),
@@ -102,6 +103,7 @@ function renderBase(template, p) {
     .replace(/\{\{OG_TYPE\}\}/g,              escAttr(p.ogType))
     .replace(/\{\{OG_IMAGE\}\}/g,             escAttr(p.ogImage))
     .replace(/\{\{TWITTER_CARD\}\}/g,         escAttr(p.twitterCard))
+    .replace(/\{\{TWITTER_SITE\}\}/g,         escAttr(p.twitterSite))
     .replace(/\{\{TWITTER_TITLE\}\}/g,        escAttr(p.twitterTitle))
     .replace(/\{\{TWITTER_DESCRIPTION\}\}/g,  escAttr(p.twitterDescription))
     .replace(/\{\{TWITTER_IMAGE\}\}/g,        escAttr(p.twitterImage))

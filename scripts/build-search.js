@@ -57,6 +57,7 @@ const html = baseTemplate
   .replace(/\{\{OG_TYPE\}\}/g,              escAttr('website'))
   .replace(/\{\{OG_IMAGE\}\}/g,             escAttr(`${site.domain}/og-image.png`))
   .replace(/\{\{TWITTER_CARD\}\}/g,         escAttr('summary_large_image'))
+  .replace(/\{\{TWITTER_SITE\}\}/g,         escAttr('@poki2online'))
   .replace(/\{\{TWITTER_TITLE\}\}/g,        escAttr(title))
   .replace(/\{\{TWITTER_DESCRIPTION\}\}/g,  escAttr(description))
   .replace(/\{\{TWITTER_IMAGE\}\}/g,        escAttr(`${site.domain}/og-image.png`))
