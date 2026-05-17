@@ -85,7 +85,7 @@ function escHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 function withBrand(t) { return t.includes('GamePix') ? t : `${t} | GamePix by Poki2`; }
-function siteImage()  { return `${site.domain}/og-image.png`; }
+function siteImage()  { return `${site.domain}/favicon-512.png`; }
 function robotsMeta(idx) { return idx ? '<meta name="robots" content="index, follow">' : '<meta name="robots" content="noindex, nofollow">'; }
 function buildSchema(schemas) {
   return schemas.map(s => `<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`).join('\n');

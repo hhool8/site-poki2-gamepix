@@ -3,7 +3,7 @@
     "name": "GamePix by Poki2",
     "domain": "https://gamepix.poki2.online",
     "faviconUrl": "https://gamepix.poki2.online/favicon.svg",
-    "ogImage": "https://gamepix.poki2.online/og-image.png"
+    "ogImage": "https://gamepix.poki2.online/favicon-512.png"
   },
   "pages": [
     {
@@ -21,7 +21,7 @@
         "description": "Play hundreds of free high-quality HTML5 games instantly in your browser. No downloads, no login required — mobile-optimized fun for everyone.",
         "url": "https://gamepix.poki2.online/",
         "type": "website",
-        "image": "https://gamepix.poki2.online/og-image.png"
+        "image": "https://gamepix.poki2.online/favicon-512.png"
       }
     },
     {

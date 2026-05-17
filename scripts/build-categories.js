@@ -30,7 +30,7 @@ function withBrand(title) {
 }
 
 function siteImage() {
-  return `${site.domain}/og-image.png`;
+  return `${site.domain}/favicon-512.png`;
 }
 
 function robotsMeta(indexable) {
